@@ -84,6 +84,8 @@ nwg-look
 qt5ct
 qt6ct
 adw-gtk3
+papirus-icon-theme
+bibata-cursor-theme
 
 # ═══════════════════════════════════════════════════════════════
 # WALLPAPER & BACKGROUND

@@ -44,6 +44,8 @@ CONFIGS=(
     "matugen"
     "clipse"
     "eww"
+    "qt5ct"
+    "qt6ct"
     "Wallpapers"
 )
 
