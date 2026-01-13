@@ -85,6 +85,11 @@ if command -v eww &> /dev/null && [ ! -f "$LOCAL_BIN/eww" ]; then
     ln -sf "$(which eww)" "$LOCAL_BIN/eww"
 fi
 
+# Link wal colors to eww (fixes SCSS import issue)
+mkdir -p "$HOME/.cache/wal"
+touch "$HOME/.cache/wal/colors.scss" # Create dummy file if missing
+ln -sf "$HOME/.cache/wal/colors.scss" "$CONFIG_DIR/eww/colors.scss"
+
 # Create XDG user directories
 echo ""
 echo "Creating XDG user directories..."
