@@ -114,6 +114,7 @@ brightnessctl
 # AUTHENTICATION & POLKIT
 # ═══════════════════════════════════════════════════════════════
 polkit-gnome
+pacman-contrib
 
 # ═══════════════════════════════════════════════════════════════
 # NETWORK & BLUETOOTH
