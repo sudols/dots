@@ -87,7 +87,7 @@ qt5ct
 qt6ct
 adw-gtk3
 papirus-icon-theme
-bibata-cursor-theme
+adwaita-icon-theme
 python-pywal
 
 # ═══════════════════════════════════════════════════════════════
