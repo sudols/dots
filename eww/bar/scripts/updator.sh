@@ -53,7 +53,7 @@ generate_json_output() {
   total=$((ofc + aur + fpk))
 
   if (( total == 0 )); then
-    echo ""
+    echo "{\"icon\": \"\", \"count\": \"\", \"tooltip\": \"\"}"
     return
   fi
 
