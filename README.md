@@ -83,11 +83,42 @@ See `packages.txt` for the full list. Key components:
 **Utils**: swww (wallpaper), grimblast (screenshot), hyprpicker (color picker), swayosd (OSD)
 **Apps**: kitty, rofi, ranger, btop, neovim, zathura
 
-## Notes
+## Theming Guide
 
-- Default browser is set to `firefox-nightly` in `hypr/config/defaults.conf`
-- GTK theme requires `adw-gtk3` and configuration via `nwg-look`
-- Fish shell should be set as default: `chsh -s /usr/bin/fish`
+### 1. Unified Theming (Matugen)
+
+Generates colors for Hyprland, Kitty, Rofi, Zephyr, etc. and sets wallpaper:
+
+```bash
+matugen image ~/.config/Wallpapers/gruvbox_01.png
+```
+
+### 2. Pywal
+
+Alternative color generation:
+
+```bash
+wal -i ~/.config/Wallpapers/gruvbox_01.png
+```
+
+### 3. GTK & Icons
+
+Configure via GUI:
+
+```bash
+nwg-look
+```
+
+_Select `adw-gtk3-dark` for theme, `Papirus-Dark` for icons, `Adwaita` for cursor._
+
+### 4. Reloading
+
+Changes usually apply instantly, but if not:
+
+```bash
+hyprctl reload
+eww reload
+```
 
 ## Screenshots
 
