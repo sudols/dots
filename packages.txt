@@ -86,6 +86,7 @@ qt6ct
 adw-gtk3
 papirus-icon-theme
 bibata-cursor-theme
+python-pywal
 
 # ═══════════════════════════════════════════════════════════════
 # WALLPAPER & BACKGROUND

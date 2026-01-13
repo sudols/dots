@@ -46,6 +46,7 @@ CONFIGS=(
     "eww"
     "qt5ct"
     "qt6ct"
+    "wal"
     "Wallpapers"
 )
 
