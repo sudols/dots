@@ -62,6 +62,9 @@ done
 # Create matugen output directory (for generated colors)
 mkdir -p "$CONFIG_DIR/matugen/output"
 
+# Create end-rs required files (notification daemon generates these)
+touch "$CONFIG_DIR/eww/end.scss" "$CONFIG_DIR/eww/end.yuck"
+
 # Install standalone files
 echo "  → Installing user-dirs.dirs..."
 [ -f "$DOTS_DIR/user-dirs.dirs" ] && cp "$DOTS_DIR/user-dirs.dirs" "$CONFIG_DIR/"
