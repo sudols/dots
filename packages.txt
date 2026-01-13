@@ -1,0 +1,70 @@
+# Required packages for this Hyprland setup
+# Install with: yay -S $(grep -v '^#' packages.txt | tr '\n' ' ')
+
+# Window Manager & Core
+hyprland
+hyprlock
+hypridle
+xdg-desktop-portal-hyprland
+
+# Bar & Notifications
+waybar
+swaync
+
+# Launchers
+rofi-wayland
+fuzzel
+
+# Terminals
+kitty
+alacritty
+
+# File Manager
+ranger
+
+# System Monitors
+btop
+htop
+
+# Editor
+neovim
+
+# Shell
+fish
+starship
+
+# Clipboard
+clipse
+wl-clipboard
+
+# PDF Viewer
+zathura
+zathura-pdf-mupdf
+
+# Audio Visualizer
+cava
+
+# Theming
+matugen-bin
+nwg-look
+qt5ct
+qt6ct
+
+# GTK Theme (optional, adjust to your preference)
+adw-gtk3
+
+# Fonts (add your preferred fonts)
+ttf-jetbrains-mono-nerd
+ttf-fira-code-nerd
+inter-font
+
+# Screenshot & Media
+grim
+slurp
+swappy
+
+# Other utilities
+brightnessctl
+playerctl
+pamixer
+network-manager-applet

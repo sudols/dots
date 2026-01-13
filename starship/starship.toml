@@ -1,0 +1,83 @@
+format = '''
+$username$directory$git_branch$custom$rust$python
+$character'''
+
+palette = 'colors'
+
+[palettes.colors]
+color1 = '#a9c7ff'
+color2 = '#09305f'
+color3 = '#c4c6cf'
+color4 = '#1d2024'
+color5 = '#09305f'
+color6 = '#111318'
+color7 = '#111318'
+color8 = '#a9c7ff'
+color9 = '#dcbce1'
+
+[username]
+show_always = true
+style_user = "color3 bold"
+style_root = "red bold"
+format = "[$user: ]($style)"
+disabled = false
+
+# Prompt symbols 
+[character]
+success_symbol = "[❯](color9 bold)"
+error_symbol = "[❯](bold red)"
+# vi stuff
+vicmd_symbol = "[❮](bold color5)"
+vimcmd_visual_symbol = "[❮](bold purple)"
+vimcmd_replace_symbol = "[❮](bold purple)"
+vimcmd_replace_one_symbol = "[❮](bold purple)"
+
+[directory]
+format = "[$path]($style)> "
+read_only = "[R]"
+read_only_style = "bold red"
+truncation_length = 0
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+
+[git_branch]
+format = "[$symbol$branch(:$remote_branch)]($style) "
+disabled = false
+
+[shell]
+bash_indicator = "bsh"
+zsh_indicator = "zsh"
+fish_indicator = ''
+unknown_indicator = "mystery shell"
+style = "cyan bold"
+disabled = true
+
+# When ranger shell is used. With multiple levels, if one ranger shell is open inside another.
+[custom.ranger]
+command = """
+if test $RANGER_LEVEL -eq 1
+    echo ' ranger'
+else if test $RANGER_LEVEL -gt 1
+    echo ' ranger~'$RANGER_LEVEL
+end
+"""
+when = "test $RANGER_LEVEL -ge 1"
+#format = "[$output]($style)"
+#format = "🎯 [$symbol]($style) "
+style = "bold color8"
+
+
+[time]
+format = "[](fg:color8 bg:color4)[ ](bg:color8 fg:color5)[](fg:color8 bg:color4)[(bg:color8 fg:color5) $time](fg:color3 bg:color4)[](fg:color4) "
+disabled = false
+time_format = "%R" # Hour:Minute Format
+
+[python]
+format = "[](fg:color8 bg:color4)[${symbol}${version}](bg:color8 fg:color5)[](fg:color8 bg:color4)[(bg:color8 fg:color5)( ${virtualenv})](fg:color3 bg:color4)[](fg:color4) "
+symbol = '🐍'
+# pyenv_version_name = true
+pyenv_prefix = 'venv'

@@ -1,0 +1,26 @@
+# Logs and temp files
+*.log
+*_history*
+clipboard_history.json
+tmp_files/
+
+# Fish variables (machine-specific)
+fish_variables
+
+# Matugen output (generated)
+matugen/output/
+
+# GTK-4 symlinks (theme-dependent, will be recreated)
+gtk-4.0/assets
+gtk-4.0/gtk.css
+gtk-4.0/gtk-dark.css
+
+# Nvim local state
+nvim/.luarc.json
+
+# Ranger bookmarks (machine-specific)
+ranger/bookmarks
+
+# Cache files
+*.cache
+__pycache__/
