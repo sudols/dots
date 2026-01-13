@@ -76,6 +76,12 @@ if [ -d "$DOTS_DIR/local-bin" ]; then
     chmod +x "$LOCAL_BIN/"*
 fi
 
+# Create eww symlink (end-rs expects eww at ~/.local/bin/eww)
+if command -v eww &> /dev/null && [ ! -f "$LOCAL_BIN/eww" ]; then
+    echo "  → Creating eww symlink..."
+    ln -sf "$(which eww)" "$LOCAL_BIN/eww"
+fi
+
 # Create XDG user directories
 echo ""
 echo "Creating XDG user directories..."

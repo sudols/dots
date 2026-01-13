@@ -69,7 +69,7 @@
         :orientation "horizontal"
         :space-evenly false
         (image
-          :path {notification.app_icon == "" ? "/home/ark/.config/eww/assets/pfp.png" : notification.app_icon}; end sets this property if the notification contains an image
+          :path {notification.app_icon == "" ? "~/.config/eww/assets/pfp.png" : notification.app_icon}; end sets this property if the notification contains an image
           :class "end-default-notification-appicon"
           :visible {notification.app_icon != "" ? true : false}
           :image-width 25
@@ -85,7 +85,7 @@
         :orientation "horizontal"
         :space-evenly false
         (image
-          :path {notification.icon == "" ? "/home/ark/.config/eww/assets/pfp.png" : notification.icon}; end sets this property if the notification contains an image
+          :path {notification.icon == "" ? "~/.config/eww/assets/pfp.png" : notification.icon}; end sets this property if the notification contains an image
           :visible {notification.icon != "" ? true : false}
           :image-width 100
           :image-height 100
@@ -137,7 +137,7 @@
         :orientation "horizontal"
         :space-evenly false
         (image
-          :path {history.app_icon == "" ? "/home/ark/.config/eww/assets/pfp.png" : history.app_icon}; end sets this property if the notification contains an image
+          :path {history.app_icon == "" ? "~/.config/eww/assets/pfp.png" : history.app_icon}; end sets this property if the notification contains an image
           :class "end-default-notification-appicon"
           :visible {history.app_icon != "" ? true : false}
           :image-width 15
@@ -153,7 +153,7 @@
         :orientation "horizontal"
         :space-evenly false
         (image
-          :path {history.icon == "" ? "/home/ark/.config/eww/assets/pfp.png" : history.icon}; end sets this property if the notification contains an image
+          :path {history.icon == "" ? "~/.config/eww/assets/pfp.png" : history.icon}; end sets this property if the notification contains an image
           :visible {history.icon != "" ? true : false}
           :image-width 50
           :image-height 50
