@@ -16,6 +16,7 @@ xdg-user-dirs
 waybar
 swaync
 eww
+socat
 
 # ═══════════════════════════════════════════════════════════════
 # LAUNCHERS
