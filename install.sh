@@ -58,6 +58,9 @@ for config in "${CONFIGS[@]}"; do
     fi
 done
 
+# Create matugen output directory (for generated colors)
+mkdir -p "$CONFIG_DIR/matugen/output"
+
 # Install standalone files
 echo "  → Installing user-dirs.dirs..."
 [ -f "$DOTS_DIR/user-dirs.dirs" ] && cp "$DOTS_DIR/user-dirs.dirs" "$CONFIG_DIR/"
