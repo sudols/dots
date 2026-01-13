@@ -1,0 +1,23 @@
+(defpoll win_data :interval "1s" :initial "{\"title\":\"Desktop\",\"icon\":\"\"}" "bash -lc './bar/scripts/window.sh json'")
+
+(defwidget window []
+  (eventbox
+    :cursor "pointer" :onclick "./bar/popup-menus/media/scripts/toggle-music.sh"
+    (box
+      :class "window"
+      :space-evenly false
+      :orientation "h"
+      (image
+        :path {win_data.icon != "" ? win_data.icon : "./assets/pfp.png"}
+        :class "win-img"
+        :image-width 22
+        :image-height 22
+        :visible {win_data.icon != "" ? true : false}
+        
+      )
+      (label
+        :text "${win_data.title}" :class "win-t"
+      )
+    )
+  )
+)

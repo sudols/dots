@@ -1,0 +1,7 @@
+(defwidget notifications []
+  (eventbox
+    :cursor "pointer"
+    :onclick "bash -c 'if eww active-windows | grep -q history-frame; then eww update notifhisrev=false; (sleep 0.2 && eww close history-frame) & else eww open history-frame; eww update notifhisrev=true; fi'"
+    (label :text "" :class "notif-hist")
+  )
+)

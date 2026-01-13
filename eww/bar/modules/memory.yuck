@@ -1,0 +1,9 @@
+(defpoll memused :interval "5s" `./bar/scripts/memory.sh`)
+
+(defwidget memory []
+  (box
+    :space-evenly false
+    :orientation "h"
+    (label :text "" :class "mem-i")
+    (label :class "mem-t" :text "${memused}" :tooltip "Memory usage")
+  ))

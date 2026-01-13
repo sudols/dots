@@ -4,7 +4,7 @@
 
 ## Starship
 starship init fish | source
-export STARSHIP_CONFIG=/home/ark/.config/starship/starship.toml
+export STARSHIP_CONFIG=$HOME/.config/starship/starship.toml
 
 ## Changes default sudoedit editor from nano to nvim ( using usr[ark] config )
 set -gx EDITOR nvim
@@ -54,7 +54,7 @@ alias tsu='sudo fish'
 ## Dirs
 alias dots='cd ~/dev/dots/'
 #alias todo='nvim /home/ark/toDo.txt'
-alias trash='cd /home/ark/.local/share/Trash/rand/'
+alias trash='cd ~/.local/share/Trash/files/'
 alias view='viewnior'
 
 ## vim
@@ -76,7 +76,7 @@ alias firefox-dev='firefox'
 alias todo='task'
 alias tui='taskwarrior-tui'
 alias xampp='/opt/lampp/xampp'
-alias logisim='wmname compiz; java -jar /home/ark/.bin/logisim-evolution-3.9.0-all.jar'
+# alias logisim='wmname compiz; java -jar ~/.bin/logisim-evolution-3.9.0-all.jar'
 
 ## utility aliases
 alias randpasswd='tr -dc "a-zA-Z0-9_#@.-" < /dev/urandom | head -c 30'
@@ -84,7 +84,7 @@ alias randpasswd='tr -dc "a-zA-Z0-9_#@.-" < /dev/urandom | head -c 30'
 #filter bloat when running this for finding key names
 #xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf "%-3s %s\n", $5, $8 }'
 
-fish_add_path /home/ark/.spicetify
+fish_add_path $HOME/.spicetify
 export QT_QPA_PLATFORMTHEME=qt5ct
 set -gx ANDROID_HOME /opt/android-sdk
 set -gx PATH $ANDROID_HOME/platform-tools $ANDROID_HOME/cmdline-tools/latest/bin $PATH

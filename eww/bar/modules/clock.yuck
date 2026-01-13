@@ -1,0 +1,7 @@
+(defpoll dt :interval "1s" "date +\"%a %-I:%M %p  %d %b\"")
+
+(defwidget clock []
+  (box :space-evenly false :orientation "h"
+    (eventbox :cursor "pointer" :onclick "hyprctl dispatch exec gnome-clocks"(label :text "󰥔" :class "clk-i"))
+    (eventbox :cursor "pointer" :onclick "./bar/popup-menus/scripts/toggle-cal.sh" (label :text "${dt}" :class "clk-t")))
+)

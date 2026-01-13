@@ -1,0 +1,80 @@
+.parent {
+	background-color: $background;
+	border-radius: 8px;
+	padding: 12px;
+}
+
+.header {
+	font-weight: bold;
+	font-size: large;
+}
+
+.title {
+	margin-right: 50px;
+	margin-left: 1px;
+	color: $text-secondary;
+}
+
+.text {
+	color: $text-secondary;
+	margin-top: 6px;
+	margin-bottom: 6px;
+}
+
+.button {
+	margin-top: 8px;
+	background-color: #333;
+	border-radius: 8px;
+	padding: 8px;
+	color: $text-secondary;
+}
+
+.button:hover {
+	background-color: #222;
+}
+
+.button:active {
+	background-color: #111;
+}
+
+.exit {
+	color: $text-secondary;
+	transition: all 0.2s ease;
+}
+
+.exit:hover {
+	color: #726e65;
+}
+
+.button {
+	transition: all 0.2s ease;
+}
+
+.body {
+}
+
+.hint {
+	color: $text-muted;
+	font-size: 0.9rem;
+}
+
+.list {
+}
+
+.list-item {
+	padding: 8px 10px;
+	margin-top: 6px;
+}
+
+.list-item .title {
+	margin: 0;
+}
+
+.subtitle {
+	color: $text-muted;
+	font-size: 0.9rem;
+}
+
+.list-item.connected {
+	border: 1px solid $border-primary;
+}

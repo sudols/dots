@@ -1,0 +1,30 @@
+#!/bin/bash
+# Dynamic volume control for EasyEffects output device
+# Finds which device EasyEffects is currently outputting to and controls its volume
+
+ACTION="$1"
+
+# Find EasyEffects' current output device by looking at ee_soe_output_level connections
+OUTPUT_DEVICE=$(pw-link -l 2>/dev/null | grep -A1 "ee_soe_output_level:output_FL" | grep "|->" | sed 's/.*|->\s*//' | cut -d: -f1)
+
+# Fallback: if EasyEffects not running or no output, use default sink
+if [ -z "$OUTPUT_DEVICE" ]; then
+    OUTPUT_DEVICE=$(pactl get-default-sink)
+fi
+
+# Execute swayosd-client with the detected device
+case "$ACTION" in
+    raise)
+        swayosd-client --output-volume raise --device="$OUTPUT_DEVICE"
+        ;;
+    lower)
+        swayosd-client --output-volume lower --device="$OUTPUT_DEVICE"
+        ;;
+    mute)
+        swayosd-client --output-volume mute-toggle --device="$OUTPUT_DEVICE"
+        ;;
+    *)
+        echo "Usage: volume-control {raise|lower|mute}"
+        exit 1
+        ;;
+esac

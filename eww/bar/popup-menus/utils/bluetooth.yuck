@@ -1,0 +1,87 @@
+(deflisten btdevices :initial "[]" `./bar/popup-menus/scripts/bt-devices.sh`)
+
+(defwindow toggle-menu-bt
+  :namespace "toggle-menu-bt"
+  :monitor   0
+  :stacking  "overlay"
+  :geometry  (geometry
+    :anchor "top right"
+    :width  "30%"
+    :height "240px"
+    :x      350
+  )
+  (box
+    :space-evenly false
+    :halign       "end"
+    :valign		  "start"
+    (revealer
+      :transition "slideup"
+      :reveal     tgbrev
+      :duration   "200ms"
+      (toggle-menu-bt)
+    )
+  )
+)
+
+(defvar tgbrev false)
+(defvar bthint false)
+
+(defwidget toggle-menu-bt []
+  (eventbox
+    :onhoverlost "./bar/popup-menus/scripts/toggle-bt.sh"
+    (box
+      :class        "parent"
+      :space-evenly false
+      :orientation  "v"
+      
+      (box
+        :class        "header"
+        :space-evenly false
+        
+        (label
+          :class "title"
+          :text  "Bluetooth"
+        )
+      )
+      
+      ;; Body section
+      (box
+        :class        "body"
+        :space-evenly false
+        :orientation  "v"
+        :vexpand      true
+        
+        (label :class "title" :text "Paired devices")
+        (eventbox
+          :onhover "eww update bthint=true"
+          :onhoverlost "eww update bthint=false"
+          (box
+            :class "list"
+            :orientation "v"
+            :space-evenly false
+            :vexpand true
+            :hexpand true
+            (for device in btdevices
+              (eventbox
+                :cursor "pointer"
+                :onclick "./bar/popup-menus/scripts/bt-toggle-device.sh ${device.address}"
+                (button
+                  :class {device.connected ? "button list-item connected" : "button list-item"}
+                  :hexpand true
+                  (box
+                    :orientation "v"
+                    :space-evenly false
+                    :tooltip "Tap to connect/disconnect"
+                    (label :class "title"    :text "${device.name}")
+                    (label :class "subtitle" :text {device.connected ? "Connected" : "Tap to connect"})
+                  )
+                )
+              )
+            )
+          )
+        )
+        
+      )
+    )
+  )
+)
