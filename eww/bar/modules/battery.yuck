@@ -1,0 +1,11 @@
+(deflisten battery :initial "{\"status\": \"unknown\", \"percent\": 0, \"icon\": \"\"}" `./bar/scripts/battery.sh`)
+
+(defwidget battery []
+  (box :class "battery"
+       :orientation "h"
+       :space-evenly false
+       :tooltip "${battery.percent}% ${battery.status}"
+    (label :class "bat-i" :text "${battery.icon}")
+    (label :class "bat-t" :text "${battery.percent}%")
+  )
+)

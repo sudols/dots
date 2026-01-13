@@ -13,6 +13,7 @@
 (include "./bar/modules/clock.yuck")
 (include "./bar/modules/tray.yuck")
 (include "./bar/modules/notifications.yuck")
+(include "./bar/modules/battery.yuck")
 
 (defwindow eww-bar
   :namespace	"bar"
@@ -79,6 +80,7 @@
       (updates)
       (network)
       (bluetooth)
+      (battery)
       (clock)
       (tray)
       (notifications)
