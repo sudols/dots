@@ -23,7 +23,18 @@ fi
 DOTS_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # ═══════════════════════════════════════════════════════════════
-# STEP 1: Enable COPRs (some may not be available for your Fedora version)
+# STEP 1: Update system first (prevents Qt version conflicts)
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "📦 Updating system packages first..."
+echo ""
+
+sudo dnf upgrade -y --refresh
+
+echo "✓ System updated"
+
+# ═══════════════════════════════════════════════════════════════
+# STEP 2: Enable COPRs (some may not be available for your Fedora version)
 # ═══════════════════════════════════════════════════════════════
 echo ""
 echo "📦 Enabling available COPR repositories..."

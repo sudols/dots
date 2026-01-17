@@ -84,7 +84,7 @@ easyeffects
 # matugen - build from source (Rust) or check COPR
 nwg-look
 qt5ct
-qt6ct
+# qt6ct - conflicts with hyprland COPR on F43 (Qt version mismatch)
 adw-gtk3-theme
 papirus-icon-theme
 adwaita-icon-theme
