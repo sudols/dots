@@ -42,7 +42,25 @@ echo ""
 echo "✓ COPR setup complete"
 
 # ═══════════════════════════════════════════════════════════════
-# STEP 2: Install packages from package list
+# STEP 2: Install essential build tools first
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "🔧 Installing essential build tools (needed for later steps)..."
+echo ""
+
+# These are needed for building from source - install explicitly first
+sudo dnf install -y --skip-unavailable \
+    gcc gcc-c++ make cmake meson ninja-build \
+    cargo rust golang python3-pip git curl unzip \
+    gtk4-devel gtk-layer-shell-devel libadwaita-devel \
+    json-glib-devel pulseaudio-libs-devel libevdev-devel \
+    libinput-devel sassc glib2-devel libdbusmenu-gtk3-devel \
+    vala
+
+echo "✓ Build tools ready"
+
+# ═══════════════════════════════════════════════════════════════
+# STEP 3: Install packages from package list
 # ═══════════════════════════════════════════════════════════════
 echo ""
 echo "📦 Installing packages from packages-fedora.txt..."
@@ -50,8 +68,9 @@ echo ""
 
 if [ -f "$DOTS_DIR/packages-fedora.txt" ]; then
     # Filter comments and empty lines, install all at once
+    # Use --skip-unavailable to handle missing/conflicting packages
     PACKAGES=$(grep -v '^#' "$DOTS_DIR/packages-fedora.txt" | grep -v '^$' | tr '\n' ' ')
-    sudo dnf install -y $PACKAGES || echo "⚠️  Some packages may have failed, continuing..."
+    sudo dnf install -y --skip-unavailable $PACKAGES || echo "⚠️  Some packages may have failed, continuing..."
 else
     echo "⚠️  packages-fedora.txt not found, skipping package installation"
 fi
@@ -101,7 +120,28 @@ fc-cache -fv
 echo "✓ Nerd Fonts installed"
 
 # ═══════════════════════════════════════════════════════════════
-# STEP 5: Build/Install packages not in repos
+# STEP 6: Install packages not in Fedora repos (pip/cargo)
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "📦 Installing pip/cargo packages..."
+echo ""
+
+# Starship prompt
+if ! command -v starship &> /dev/null; then
+    echo "  → Installing starship..."
+    cargo install starship --locked || echo "⚠️  starship failed, try: curl -sS https://starship.rs/install.sh | sh"
+    echo "  ✓ starship installed"
+fi
+
+# Pywal
+if ! command -v wal &> /dev/null; then
+    echo "  → Installing pywal..."
+    pip install --user pywal || python3 -m pip install --user pywal
+    echo "  ✓ pywal installed"
+fi
+
+# ═══════════════════════════════════════════════════════════════
+# STEP 6: Build/Install packages not in repos
 # ═══════════════════════════════════════════════════════════════
 echo ""
 echo "🔧 Building packages from source..."
@@ -196,7 +236,7 @@ if ! command -v swaync &> /dev/null; then
 fi
 
 # ═══════════════════════════════════════════════════════════════
-# STEP 6: Enable required services
+# STEP 7: Enable required services
 # ═══════════════════════════════════════════════════════════════
 echo ""
 echo "🔧 Enabling system services..."
@@ -211,7 +251,7 @@ systemctl --user enable --now pipewire pipewire-pulse wireplumber || true
 echo "✓ Services enabled"
 
 # ═══════════════════════════════════════════════════════════════
-# STEP 7: Set fish as default shell
+# STEP 8: Set fish as default shell
 # ═══════════════════════════════════════════════════════════════
 echo ""
 echo "🐟 Setting fish as default shell..."

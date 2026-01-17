@@ -53,7 +53,7 @@ neovim
 # SHELL & PROMPT
 # ═══════════════════════════════════════════════════════════════
 fish
-starship
+# starship - install via: cargo install starship OR curl -sS https://starship.rs/install.sh | sh
 lsd
 
 # ═══════════════════════════════════════════════════════════════
@@ -88,7 +88,7 @@ qt6ct
 adw-gtk3-theme
 papirus-icon-theme
 adwaita-icon-theme
-python3-pywal
+# pywal - install via: pip install pywal
 
 # ═══════════════════════════════════════════════════════════════
 # WALLPAPER & BACKGROUND
@@ -113,7 +113,7 @@ brightnessctl
 # ═══════════════════════════════════════════════════════════════
 # AUTHENTICATION & POLKIT
 # ═══════════════════════════════════════════════════════════════
-polkit-gnome
+polkit
 
 # ═══════════════════════════════════════════════════════════════
 # NETWORK & BLUETOOTH
