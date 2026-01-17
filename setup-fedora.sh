@@ -23,13 +23,20 @@ fi
 DOTS_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # ═══════════════════════════════════════════════════════════════
-# STEP 1: Update system first (prevents Qt version conflicts)
+# STEP 1: Fix Qt version conflicts (F43 has Qt 6.10, COPR has 6.9)
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "📦 Updating system packages first..."
+echo "🔧 Removing conflicting Qt packages (if present)..."
 echo ""
 
-sudo dnf upgrade -y --refresh
+# These COPR packages conflict with Fedora 43's Qt 6.10
+sudo dnf remove -y hyprland-qt-support hyprland-qtutils 2>/dev/null || true
+
+echo ""
+echo "📦 Updating system packages..."
+echo ""
+
+sudo dnf upgrade -y --refresh --best --allowerasing
 
 echo "✓ System updated"
 
