@@ -53,7 +53,7 @@ neovim
 # SHELL & PROMPT
 # ═══════════════════════════════════════════════════════════════
 fish
-# starship - install via: cargo install starship OR curl -sS https://starship.rs/install.sh | sh
+# starship - installed via cargo in setup script
 lsd
 
 # ═══════════════════════════════════════════════════════════════
