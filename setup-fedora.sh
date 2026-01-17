@@ -66,7 +66,7 @@ sudo dnf install -y --skip-unavailable \
     gtk4-devel gtk-layer-shell-devel libadwaita-devel \
     json-glib-devel pulseaudio-libs-devel libevdev-devel \
     libinput-devel sassc glib2-devel libdbusmenu-gtk3-devel \
-    vala
+    vala scdoc
 
 echo "✓ Build tools ready"
 
