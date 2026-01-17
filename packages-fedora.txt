@@ -1,0 +1,160 @@
+# Required packages for Hyprland setup on Fedora
+# Install with: sudo dnf install $(grep -v '^#' packages-fedora.txt | grep -v '^$' | tr '\n' ' ')
+#
+# IMPORTANT: Run setup-fedora.sh first to enable required COPRs!
+
+# ═══════════════════════════════════════════════════════════════
+# WINDOW MANAGER & CORE (requires solopasha/hyprland COPR)
+# ═══════════════════════════════════════════════════════════════
+hyprland
+hyprlock
+hypridle
+xdg-desktop-portal-hyprland
+xdg-user-dirs
+
+# ═══════════════════════════════════════════════════════════════
+# NOTIFICATIONS & WIDGETS
+# ═══════════════════════════════════════════════════════════════
+libnotify
+socat
+# swaync - install from COPR: erikreider/SwayNotificationCenter
+# eww - build from source or use COPR
+
+# ═══════════════════════════════════════════════════════════════
+# LAUNCHERS
+# ═══════════════════════════════════════════════════════════════
+rofi-wayland
+fuzzel
+
+# ═══════════════════════════════════════════════════════════════
+# TERMINALS
+# ═══════════════════════════════════════════════════════════════
+kitty
+alacritty
+
+# ═══════════════════════════════════════════════════════════════
+# FILE MANAGER
+# ═══════════════════════════════════════════════════════════════
+ranger
+nemo
+
+# ═══════════════════════════════════════════════════════════════
+# SYSTEM MONITORS
+# ═══════════════════════════════════════════════════════════════
+btop
+htop
+
+# ═══════════════════════════════════════════════════════════════
+# EDITOR
+# ═══════════════════════════════════════════════════════════════
+neovim
+
+# ═══════════════════════════════════════════════════════════════
+# SHELL & PROMPT
+# ═══════════════════════════════════════════════════════════════
+fish
+starship
+lsd
+
+# ═══════════════════════════════════════════════════════════════
+# CLIPBOARD
+# ═══════════════════════════════════════════════════════════════
+wl-clipboard
+# clipse - build from source (Go) or check COPR
+
+# ═══════════════════════════════════════════════════════════════
+# PDF & DOCUMENT VIEWER
+# ═══════════════════════════════════════════════════════════════
+zathura
+zathura-pdf-mupdf
+
+# ═══════════════════════════════════════════════════════════════
+# AUDIO & VISUALIZATION
+# ═══════════════════════════════════════════════════════════════
+cava
+pipewire
+wireplumber
+pamixer
+playerctl
+easyeffects
+
+# ═══════════════════════════════════════════════════════════════
+# THEMING & APPEARANCE
+# ═══════════════════════════════════════════════════════════════
+# matugen - build from source (Rust) or check COPR
+nwg-look
+qt5ct
+qt6ct
+adw-gtk3-theme
+papirus-icon-theme
+adwaita-icon-theme
+python3-pywal
+
+# ═══════════════════════════════════════════════════════════════
+# WALLPAPER & BACKGROUND
+# ═══════════════════════════════════════════════════════════════
+swww
+
+# ═══════════════════════════════════════════════════════════════
+# SCREENSHOT & SCREEN UTILITIES
+# ═══════════════════════════════════════════════════════════════
+grim
+slurp
+hyprpicker
+# grimblast - install manually from https://github.com/hyprwm/contrib
+# swappy - check COPR or build from source
+
+# ═══════════════════════════════════════════════════════════════
+# OSD & SYSTEM CONTROLS
+# ═══════════════════════════════════════════════════════════════
+# swayosd - check COPR: ErikReider/SwayOSD
+brightnessctl
+
+# ═══════════════════════════════════════════════════════════════
+# AUTHENTICATION & POLKIT
+# ═══════════════════════════════════════════════════════════════
+polkit-gnome
+
+# ═══════════════════════════════════════════════════════════════
+# NETWORK & BLUETOOTH
+# ═══════════════════════════════════════════════════════════════
+NetworkManager
+network-manager-applet
+bluez
+bluez-tools
+blueman
+
+# ═══════════════════════════════════════════════════════════════
+# FONTS
+# ═══════════════════════════════════════════════════════════════
+jetbrains-mono-fonts
+fira-code-fonts
+# Nerd fonts - install manually from https://www.nerdfonts.com/
+google-noto-fonts-common
+google-noto-sans-fonts
+google-noto-cjk-fonts
+google-noto-emoji-fonts
+
+# ═══════════════════════════════════════════════════════════════
+# IMAGE VIEWER
+# ═══════════════════════════════════════════════════════════════
+# viewnior - may not be in repos, use eog or loupe instead
+loupe
+
+# ═══════════════════════════════════════════════════════════════
+# BUILD TOOLS (for compiling AUR-like packages)
+# ═══════════════════════════════════════════════════════════════
+gcc
+gcc-c++
+make
+cmake
+cargo
+golang
+git
+
+# ═══════════════════════════════════════════════════════════════
+# PORTABLE SSD ESSENTIALS
+# ═══════════════════════════════════════════════════════════════
+linux-firmware
+mesa-dri-drivers
+mesa-vulkan-drivers

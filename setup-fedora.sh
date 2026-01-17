@@ -1,0 +1,216 @@
+#!/bin/bash
+
+# Fedora Hyprland Setup Script
+# Run this BEFORE install.sh to set up Fedora-specific dependencies
+
+set -e
+
+echo "╔════════════════════════════════════════════════════════╗"
+echo "║        Fedora Hyprland Setup Script                    ║"
+echo "╚════════════════════════════════════════════════════════╝"
+echo ""
+
+# Check if running on Fedora
+if ! grep -q "Fedora" /etc/os-release 2>/dev/null; then
+    echo "⚠️  Warning: This script is designed for Fedora. You appear to be running a different distro."
+    read -p "Continue anyway? [y/N] " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 1
+    fi
+fi
+
+DOTS_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# ═══════════════════════════════════════════════════════════════
+# STEP 1: Enable COPRs
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "📦 Enabling required COPR repositories..."
+echo ""
+
+# Hyprland ecosystem
+sudo dnf copr enable -y solopasha/hyprland
+
+# SwayNotificationCenter
+sudo dnf copr enable -y erikreider/SwayNotificationCenter
+
+# SwayOSD
+sudo dnf copr enable -y erikreider/SwayOSD
+
+# EWW (check if available, may need manual build)
+# sudo dnf copr enable -y raven2cz/eww
+
+echo ""
+echo "✓ COPR repositories enabled"
+
+# ═══════════════════════════════════════════════════════════════
+# STEP 2: Install packages from package list
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "📦 Installing packages from packages-fedora.txt..."
+echo ""
+
+if [ -f "$DOTS_DIR/packages-fedora.txt" ]; then
+    # Filter comments and empty lines, install all at once
+    PACKAGES=$(grep -v '^#' "$DOTS_DIR/packages-fedora.txt" | grep -v '^$' | tr '\n' ' ')
+    sudo dnf install -y $PACKAGES
+else
+    echo "⚠️  packages-fedora.txt not found, skipping package installation"
+fi
+
+# ═══════════════════════════════════════════════════════════════
+# STEP 3: Install COPR packages
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "📦 Installing COPR packages..."
+echo ""
+
+sudo dnf install -y SwayNotificationCenter swayosd || echo "⚠️  Some COPR packages may not be available"
+
+# ═══════════════════════════════════════════════════════════════
+# STEP 4: Install Nerd Fonts
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "🔤 Installing Nerd Fonts..."
+echo ""
+
+FONT_DIR="$HOME/.local/share/fonts"
+mkdir -p "$FONT_DIR"
+
+# Download and install JetBrains Mono Nerd Font
+if [ ! -f "$FONT_DIR/JetBrainsMonoNerdFont-Regular.ttf" ]; then
+    echo "  → Downloading JetBrains Mono Nerd Font..."
+    curl -fLo "/tmp/JetBrainsMono.zip" \
+        "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip"
+    unzip -o "/tmp/JetBrainsMono.zip" -d "$FONT_DIR"
+    rm "/tmp/JetBrainsMono.zip"
+fi
+
+# Download and install FiraCode Nerd Font
+if [ ! -f "$FONT_DIR/FiraCodeNerdFont-Regular.ttf" ]; then
+    echo "  → Downloading FiraCode Nerd Font..."
+    curl -fLo "/tmp/FiraCode.zip" \
+        "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip"
+    unzip -o "/tmp/FiraCode.zip" -d "$FONT_DIR"
+    rm "/tmp/FiraCode.zip"
+fi
+
+# Refresh font cache
+fc-cache -fv
+
+echo "✓ Nerd Fonts installed"
+
+# ═══════════════════════════════════════════════════════════════
+# STEP 5: Build/Install packages not in repos
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "🔧 Building packages from source..."
+echo ""
+
+BUILD_DIR="$HOME/.local/src"
+mkdir -p "$BUILD_DIR"
+
+# --- Matugen (Material You color generator) ---
+if ! command -v matugen &> /dev/null; then
+    echo "  → Building matugen..."
+    cd "$BUILD_DIR"
+    if [ ! -d "matugen" ]; then
+        git clone https://github.com/InioX/matugen.git
+    fi
+    cd matugen
+    git pull
+    cargo build --release
+    cp target/release/matugen "$HOME/.local/bin/"
+    echo "  ✓ matugen installed"
+fi
+
+# --- Clipse (clipboard manager) ---
+if ! command -v clipse &> /dev/null; then
+    echo "  → Building clipse..."
+    cd "$BUILD_DIR"
+    if [ ! -d "clipse" ]; then
+        git clone https://github.com/savedra1/clipse.git
+    fi
+    cd clipse
+    git pull
+    go build -o clipse .
+    cp clipse "$HOME/.local/bin/"
+    echo "  ✓ clipse installed"
+fi
+
+# --- Grimblast (screenshot helper) ---
+if ! command -v grimblast &> /dev/null; then
+    echo "  → Installing grimblast..."
+    cd "$BUILD_DIR"
+    if [ ! -d "contrib" ]; then
+        git clone https://github.com/hyprwm/contrib.git
+    fi
+    cd contrib/grimblast
+    sudo make install
+    echo "  ✓ grimblast installed"
+fi
+
+# --- EWW (widgets) ---
+if ! command -v eww &> /dev/null; then
+    echo "  → Building eww (this may take a while)..."
+    cd "$BUILD_DIR"
+    if [ ! -d "eww" ]; then
+        git clone https://github.com/elkowar/eww.git
+    fi
+    cd eww
+    git pull
+    cargo build --release --no-default-features --features wayland
+    cp target/release/eww "$HOME/.local/bin/"
+    echo "  ✓ eww installed"
+fi
+
+# ═══════════════════════════════════════════════════════════════
+# STEP 6: Enable required services
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "🔧 Enabling system services..."
+echo ""
+
+# Bluetooth
+sudo systemctl enable --now bluetooth || true
+
+# PipeWire (usually enabled by default on Fedora)
+systemctl --user enable --now pipewire pipewire-pulse wireplumber || true
+
+echo "✓ Services enabled"
+
+# ═══════════════════════════════════════════════════════════════
+# STEP 7: Set fish as default shell
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "🐟 Setting fish as default shell..."
+echo ""
+
+if command -v fish &> /dev/null; then
+    FISH_PATH=$(which fish)
+    if ! grep -q "$FISH_PATH" /etc/shells; then
+        echo "$FISH_PATH" | sudo tee -a /etc/shells
+    fi
+    
+    if [ "$SHELL" != "$FISH_PATH" ]; then
+        chsh -s "$FISH_PATH"
+        echo "✓ Default shell changed to fish (will take effect on next login)"
+    else
+        echo "✓ Fish is already your default shell"
+    fi
+fi
+
+echo ""
+echo "╔════════════════════════════════════════════════════════╗"
+echo "║   ✓ Fedora setup complete!                             ║"
+echo "╚════════════════════════════════════════════════════════╝"
+echo ""
+echo "Next steps:"
+echo "  1. Run ./install.sh to copy dotfiles"
+echo "  2. Log out and select Hyprland from display manager"
+echo "  3. Or start with: Hyprland"
+echo ""
+echo "Note: $HOME/.local/bin should be in your PATH"
+echo "      Add to fish config: fish_add_path ~/.local/bin"
+echo ""

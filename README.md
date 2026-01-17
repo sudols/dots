@@ -31,6 +31,8 @@ My Hyprland configuration files for Arch Linux.
 
 ## Quick Install
 
+### Arch Linux
+
 ```bash
 # Clone the repo
 git clone git@github.com:sudols/dots.git ~/dev/dots
@@ -42,6 +44,22 @@ yay -S $(grep -v '^#' packages.txt | grep -v '^$' | grep -v '═' | tr '\n' ' ')
 # Run install script
 ./install.sh
 ```
+
+### Fedora
+
+```bash
+# Clone the repo
+git clone git@github.com:sudols/dots.git ~/dev/dots
+cd ~/dev/dots
+
+# Run Fedora setup (enables COPRs, installs packages, builds from source)
+./setup-fedora.sh
+
+# Copy dotfiles to ~/.config
+./install.sh
+```
+
+> **Note:** `setup-fedora.sh` will build packages like eww, matugen, and clipse from source since they're not in Fedora repos.
 
 ## What the Install Script Does
 
