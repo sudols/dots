@@ -1,30 +1,59 @@
 #!/usr/bin/env sh
 
-AUR_HELPER="yay"
+# Auto-detect distro
+if [ -f /etc/fedora-release ]; then
+  DISTRO="fedora"
+elif [ -f /etc/arch-release ]; then
+  DISTRO="arch"
+  AUR_HELPER="yay"
+else
+  DISTRO="unknown"
+fi
+
 UPDATES_DIR="/tmp/updates"
 ICON="󰮯"
 INTERVAL_MINUTES=200
 
-# Exit early on snapshot boots
-if grep -q 'subvol=@/.snapshots' /proc/cmdline; then
+# Exit early on snapshot boots (Arch btrfs specific)
+if grep -q 'subvol=@/.snapshots' /proc/cmdline 2>/dev/null; then
   exit
 fi
 
 mkdir -p "$UPDATES_DIR"
 
 check_and_write_updates() {
-  # Official repos
-  ofc=$(CHECKUPDATES_DB=$(mktemp -u) checkupdates 2>/dev/null \
-        | tee "$UPDATES_DIR/official_list" \
-        | wc -l)
-  echo "$ofc" > "$UPDATES_DIR/official"
-
-  # AUR
-  aur=$($AUR_HELPER -Qua 2>/dev/null \
-        | grep -v '\[ignored\]' \
-        | tee "$UPDATES_DIR/aur_list" \
-        | wc -l)
-  echo "$aur" > "$UPDATES_DIR/aur"
+  case "$DISTRO" in
+    fedora)
+      # DNF updates
+      ofc=$(dnf check-update -q 2>/dev/null \
+            | grep -v "^$" \
+            | tee "$UPDATES_DIR/official_list" \
+            | wc -l)
+      echo "$ofc" > "$UPDATES_DIR/official"
+      # No AUR on Fedora
+      echo "0" > "$UPDATES_DIR/aur"
+      : > "$UPDATES_DIR/aur_list"
+      ;;
+    arch)
+      # Official repos
+      ofc=$(CHECKUPDATES_DB=$(mktemp -u) checkupdates 2>/dev/null \
+            | tee "$UPDATES_DIR/official_list" \
+            | wc -l)
+      echo "$ofc" > "$UPDATES_DIR/official"
+      # AUR
+      aur=$($AUR_HELPER -Qua 2>/dev/null \
+            | grep -v '\[ignored\]' \
+            | tee "$UPDATES_DIR/aur_list" \
+            | wc -l)
+      echo "$aur" > "$UPDATES_DIR/aur"
+      ;;
+    *)
+      echo "0" > "$UPDATES_DIR/official"
+      echo "0" > "$UPDATES_DIR/aur"
+      : > "$UPDATES_DIR/official_list"
+      : > "$UPDATES_DIR/aur_list"
+      ;;
+  esac
 
   # Flatpak
   if command -v flatpak >/dev/null 2>&1; then

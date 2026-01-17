@@ -1,13 +1,12 @@
 # Dotfiles
 
-My Hyprland configuration files for Arch Linux.
+My Hyprland configuration files for Arch Linux and Fedora.
 
 ## Contents
 
 | Config        | Description                          |
 | ------------- | ------------------------------------ |
 | `hypr/`       | Hyprland WM, hyprlock, hypridle      |
-| `waybar/`     | Status bar with custom modules       |
 | `eww/`        | ElKowars Widgets (dashboard, popups) |
 | `kitty/`      | Kitty terminal                       |
 | `alacritty/`  | Alacritty terminal                   |
@@ -95,9 +94,9 @@ This setup uses custom XDG directories:
 
 ## Dependencies
 
-See `packages.txt` for the full list. Key components:
+See `packages.txt` (Arch) or `packages-fedora.txt` (Fedora) for the full list. Key components:
 
-**Core**: hyprland, hyprlock, hypridle, waybar, eww, swaync
+**Core**: hyprland, hyprlock, hypridle, eww, swaync
 **Utils**: swww (wallpaper), grimblast (screenshot), hyprpicker (color picker), swayosd (OSD)
 **Apps**: kitty, rofi, ranger, btop, neovim, zathura
 
