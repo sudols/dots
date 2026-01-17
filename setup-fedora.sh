@@ -23,26 +23,23 @@ fi
 DOTS_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # ═══════════════════════════════════════════════════════════════
-# STEP 1: Enable COPRs
+# STEP 1: Enable COPRs (some may not be available for your Fedora version)
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "📦 Enabling required COPR repositories..."
+echo "📦 Enabling available COPR repositories..."
 echo ""
 
-# Hyprland ecosystem
-sudo dnf copr enable -y solopasha/hyprland
+# Hyprland ecosystem (required)
+sudo dnf copr enable -y solopasha/hyprland || echo "⚠️  Hyprland COPR not available, will need manual install"
 
-# SwayNotificationCenter
-sudo dnf copr enable -y erikreider/SwayNotificationCenter
+# SwayNotificationCenter (optional - will build from source if unavailable)
+sudo dnf copr enable -y erikreider/SwayNotificationCenter 2>/dev/null || echo "ℹ️  SwayNotificationCenter COPR not available for this Fedora version"
 
-# SwayOSD
-sudo dnf copr enable -y erikreider/SwayOSD
-
-# EWW (check if available, may need manual build)
-# sudo dnf copr enable -y raven2cz/eww
+# SwayOSD - often unavailable for newer Fedora, will build from source
+sudo dnf copr enable -y erikreider/SwayOSD 2>/dev/null || echo "ℹ️  SwayOSD COPR not available, will build from source"
 
 echo ""
-echo "✓ COPR repositories enabled"
+echo "✓ COPR setup complete"
 
 # ═══════════════════════════════════════════════════════════════
 # STEP 2: Install packages from package list
@@ -54,19 +51,21 @@ echo ""
 if [ -f "$DOTS_DIR/packages-fedora.txt" ]; then
     # Filter comments and empty lines, install all at once
     PACKAGES=$(grep -v '^#' "$DOTS_DIR/packages-fedora.txt" | grep -v '^$' | tr '\n' ' ')
-    sudo dnf install -y $PACKAGES
+    sudo dnf install -y $PACKAGES || echo "⚠️  Some packages may have failed, continuing..."
 else
     echo "⚠️  packages-fedora.txt not found, skipping package installation"
 fi
 
 # ═══════════════════════════════════════════════════════════════
-# STEP 3: Install COPR packages
+# STEP 3: Install COPR packages (if available)
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "📦 Installing COPR packages..."
+echo "📦 Attempting to install COPR packages..."
 echo ""
 
-sudo dnf install -y SwayNotificationCenter swayosd || echo "⚠️  Some COPR packages may not be available"
+# Try to install from COPR, failures are OK - we'll build from source
+sudo dnf install -y SwayNotificationCenter 2>/dev/null || echo "ℹ️  SwayNotificationCenter not in repos, will build from source"
+sudo dnf install -y swayosd 2>/dev/null || echo "ℹ️  SwayOSD not in repos, will build from source"
 
 # ═══════════════════════════════════════════════════════════════
 # STEP 4: Install Nerd Fonts
@@ -163,6 +162,37 @@ if ! command -v eww &> /dev/null; then
     cargo build --release --no-default-features --features wayland
     cp target/release/eww "$HOME/.local/bin/"
     echo "  ✓ eww installed"
+fi
+
+# --- SwayOSD (OSD for volume/brightness) ---
+if ! command -v swayosd-server &> /dev/null; then
+    echo "  → Building SwayOSD..."
+    cd "$BUILD_DIR"
+    if [ ! -d "SwayOSD" ]; then
+        git clone https://github.com/ErikReider/SwayOSD.git
+    fi
+    cd SwayOSD
+    git pull
+    # SwayOSD uses meson
+    meson setup build
+    ninja -C build
+    sudo ninja -C build install
+    echo "  ✓ SwayOSD installed"
+fi
+
+# --- SwayNotificationCenter (swaync) ---
+if ! command -v swaync &> /dev/null; then
+    echo "  → Building SwayNotificationCenter..."
+    cd "$BUILD_DIR"
+    if [ ! -d "SwayNotificationCenter" ]; then
+        git clone https://github.com/ErikReider/SwayNotificationCenter.git
+    fi
+    cd SwayNotificationCenter
+    git pull
+    meson setup build
+    ninja -C build
+    sudo ninja -C build install
+    echo "  ✓ SwayNotificationCenter installed"
 fi
 
 # ═══════════════════════════════════════════════════════════════

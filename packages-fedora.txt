@@ -148,9 +148,21 @@ gcc
 gcc-c++
 make
 cmake
+meson
+ninja-build
 cargo
 golang
 git
+gtk4-devel
+gtk-layer-shell-devel
+libadwaita-devel
+json-glib-devel
+pulseaudio-libs-devel
+libevdev-devel
+libinput-devel
+sassc
+glib2-devel
+libdbusmenu-gtk3-devel
 
 # ═══════════════════════════════════════════════════════════════
 # PORTABLE SSD ESSENTIALS
