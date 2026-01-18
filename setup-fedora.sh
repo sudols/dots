@@ -1,18 +1,20 @@
 #!/bin/bash
 
-# Fedora Hyprland Setup Script
-# Run this BEFORE install.sh to set up Fedora-specific dependencies
+# Fedora Hyprland Config Setup Script
+# For systems with Hyprland already installed (e.g., via JaKooLit installer)
+# This installs config-specific packages via dnf/COPR (minimal source builds)
 
 set -e
 
 echo "╔════════════════════════════════════════════════════════╗"
-echo "║        Fedora Hyprland Setup Script                    ║"
+echo "║     Fedora Config Dependencies Setup                   ║"
+echo "║     (Hyprland already installed)                       ║"
 echo "╚════════════════════════════════════════════════════════╝"
 echo ""
 
 # Check if running on Fedora
 if ! grep -q "Fedora" /etc/os-release 2>/dev/null; then
-    echo "⚠️  Warning: This script is designed for Fedora. You appear to be running a different distro."
+    echo "⚠️  Warning: This script is designed for Fedora."
     read -p "Continue anyway? [y/N] " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
@@ -23,89 +25,81 @@ fi
 DOTS_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # ═══════════════════════════════════════════════════════════════
-# STEP 1: Fix Qt version conflicts (F43 has Qt 6.10, COPR has 6.9)
+# STEP 1: Enable COPR repositories
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "🔧 Removing conflicting Qt packages (if present)..."
+echo "📦 Enabling COPR repositories..."
 echo ""
 
-# These COPR packages conflict with Fedora 43's Qt 6.10
-sudo dnf remove -y hyprland-qt-support hyprland-qtutils 2>/dev/null || true
+# EWW widgets
+sudo dnf copr enable -y varlad/eww || echo "⚠️  varlad/eww COPR failed"
 
-echo ""
-echo "📦 Updating system packages..."
-echo ""
+# Matugen (Material You color generator)
+sudo dnf copr enable -y heus-sueh/packages || echo "⚠️  heus-sueh/packages COPR failed"
 
-sudo dnf upgrade -y --refresh --best --allowerasing
+# Starship prompt
+sudo dnf copr enable -y atim/starship || echo "⚠️  atim/starship COPR failed"
 
-echo "✓ System updated"
+# SwayNotificationCenter
+sudo dnf copr enable -y erikreider/SwayNotificationCenter 2>/dev/null || echo "ℹ️  SwayNotificationCenter COPR not available"
+
+# SwayOSD
+sudo dnf copr enable -y erikreider/SwayOSD 2>/dev/null || echo "ℹ️  SwayOSD COPR not available"
+
+# Clipse clipboard manager
+sudo dnf copr enable -y azandure/clipse || echo "⚠️  azandure/clipse COPR failed"
+
+echo "✓ COPR repositories enabled"
 
 # ═══════════════════════════════════════════════════════════════
-# STEP 2: Enable COPRs (some may not be available for your Fedora version)
+# STEP 2: Install config-specific packages from dnf
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "📦 Enabling available COPR repositories..."
+echo "📦 Installing config-specific packages..."
 echo ""
 
-# Hyprland ecosystem (required)
-sudo dnf copr enable -y solopasha/hyprland || echo "⚠️  Hyprland COPR not available, will need manual install"
-
-# SwayNotificationCenter (optional - will build from source if unavailable)
-sudo dnf copr enable -y erikreider/SwayNotificationCenter 2>/dev/null || echo "ℹ️  SwayNotificationCenter COPR not available for this Fedora version"
-
-# SwayOSD - often unavailable for newer Fedora, will build from source
-sudo dnf copr enable -y erikreider/SwayOSD 2>/dev/null || echo "ℹ️  SwayOSD COPR not available, will build from source"
-
-echo ""
-echo "✓ COPR setup complete"
-
-# ═══════════════════════════════════════════════════════════════
-# STEP 2: Install essential build tools first
-# ═══════════════════════════════════════════════════════════════
-echo ""
-echo "🔧 Installing essential build tools (needed for later steps)..."
-echo ""
-
-# These are needed for building from source - install explicitly first
+# Core config dependencies (most should be available)
 sudo dnf install -y --skip-unavailable \
-    gcc gcc-c++ make cmake meson ninja-build \
-    cargo rust golang python3-pip git curl unzip \
-    gtk4-devel gtk-layer-shell-devel libadwaita-devel \
-    json-glib-devel pulseaudio-libs-devel libevdev-devel \
-    libinput-devel sassc glib2-devel libdbusmenu-gtk3-devel \
-    vala scdoc
+    eww \
+    matugen \
+    starship \
+    SwayNotificationCenter \
+    swayosd \
+    alacritty \
+    kitty \
+    fish \
+    rofi-wayland \
+    fuzzel \
+    btop \
+    htop \
+    ranger \
+    neovim \
+    cava \
+    wl-clipboard \
+    clipse \
+    zathura \
+    zathura-pdf-mupdf \
+    swww \
+    grim \
+    slurp \
+    hyprpicker \
+    brightnessctl \
+    playerctl \
+    pamixer \
+    socat \
+    libnotify \
+    lsd \
+    nwg-look \
+    qt5ct \
+    adw-gtk3-theme \
+    papirus-icon-theme \
+    nemo \
+    loupe
 
-echo "✓ Build tools ready"
+echo "✓ DNF packages installed"
 
 # ═══════════════════════════════════════════════════════════════
-# STEP 3: Install packages from package list
-# ═══════════════════════════════════════════════════════════════
-echo ""
-echo "📦 Installing packages from packages-fedora.txt..."
-echo ""
-
-if [ -f "$DOTS_DIR/packages-fedora.txt" ]; then
-    # Filter comments and empty lines, install all at once
-    # Use --skip-unavailable to handle missing/conflicting packages
-    PACKAGES=$(grep -v '^#' "$DOTS_DIR/packages-fedora.txt" | grep -v '^$' | tr '\n' ' ')
-    sudo dnf install -y --skip-unavailable $PACKAGES || echo "⚠️  Some packages may have failed, continuing..."
-else
-    echo "⚠️  packages-fedora.txt not found, skipping package installation"
-fi
-
-# ═══════════════════════════════════════════════════════════════
-# STEP 3: Install COPR packages (if available)
-# ═══════════════════════════════════════════════════════════════
-echo ""
-echo "📦 Attempting to install COPR packages..."
-echo ""
-
-# Try to install from COPR, failures are OK - we'll build from source
-sudo dnf install -y SwayNotificationCenter 2>/dev/null || echo "ℹ️  SwayNotificationCenter not in repos, will build from source"
-sudo dnf install -y swayosd 2>/dev/null || echo "ℹ️  SwayOSD not in repos, will build from source"
-
-# ═══════════════════════════════════════════════════════════════
-# STEP 4: Install Nerd Fonts
+# STEP 3: Install Nerd Fonts (needed for eww/starship icons)
 # ═══════════════════════════════════════════════════════════════
 echo ""
 echo "🔤 Installing Nerd Fonts..."
@@ -114,7 +108,6 @@ echo ""
 FONT_DIR="$HOME/.local/share/fonts"
 mkdir -p "$FONT_DIR"
 
-# Download and install JetBrains Mono Nerd Font
 if [ ! -f "$FONT_DIR/JetBrainsMonoNerdFont-Regular.ttf" ]; then
     echo "  → Downloading JetBrains Mono Nerd Font..."
     curl -fLo "/tmp/JetBrainsMono.zip" \
@@ -123,7 +116,6 @@ if [ ! -f "$FONT_DIR/JetBrainsMonoNerdFont-Regular.ttf" ]; then
     rm "/tmp/JetBrainsMono.zip"
 fi
 
-# Download and install FiraCode Nerd Font
 if [ ! -f "$FONT_DIR/FiraCodeNerdFont-Regular.ttf" ]; then
     echo "  → Downloading FiraCode Nerd Font..."
     curl -fLo "/tmp/FiraCode.zip" \
@@ -132,147 +124,51 @@ if [ ! -f "$FONT_DIR/FiraCodeNerdFont-Regular.ttf" ]; then
     rm "/tmp/FiraCode.zip"
 fi
 
-# Refresh font cache
-fc-cache -fv
-
+fc-cache -fv > /dev/null 2>&1
 echo "✓ Nerd Fonts installed"
 
 # ═══════════════════════════════════════════════════════════════
-# STEP 6: Install packages not in Fedora repos (pip/cargo)
+# STEP 4: Install pip packages (pywal not in Fedora repos)
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "📦 Installing pip/cargo packages..."
+echo "🐍 Installing pip packages..."
 echo ""
 
-# Starship prompt
-if ! command -v starship &> /dev/null; then
-    echo "  → Installing starship..."
-    cargo install starship --locked || echo "⚠️  starship failed, try: curl -sS https://starship.rs/install.sh | sh"
-    echo "  ✓ starship installed"
-fi
+# Ensure pip is available
+sudo dnf install -y python3-pip
 
-# Pywal
 if ! command -v wal &> /dev/null; then
     echo "  → Installing pywal..."
-    pip install --user pywal || python3 -m pip install --user pywal
+    pip install --user pywal
     echo "  ✓ pywal installed"
+else
+    echo "  ✓ pywal already installed"
 fi
+
+mkdir -p "$HOME/.local/bin"
 
 # ═══════════════════════════════════════════════════════════════
-# STEP 6: Build/Install packages not in repos
+# STEP 6: Install grimblast (screenshot helper, simple copy)
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "🔧 Building packages from source..."
+echo "📸 Installing grimblast..."
 echo ""
 
-BUILD_DIR="$HOME/.local/src"
-mkdir -p "$BUILD_DIR"
-
-# --- Matugen (Material You color generator) ---
-if ! command -v matugen &> /dev/null; then
-    echo "  → Building matugen..."
-    cd "$BUILD_DIR"
-    if [ ! -d "matugen" ]; then
-        git clone https://github.com/InioX/matugen.git
-    fi
-    cd matugen
-    git pull
-    cargo build --release
-    cp target/release/matugen "$HOME/.local/bin/"
-    echo "  ✓ matugen installed"
-fi
-
-# --- Clipse (clipboard manager) ---
-if ! command -v clipse &> /dev/null; then
-    echo "  → Building clipse..."
-    cd "$BUILD_DIR"
-    if [ ! -d "clipse" ]; then
-        git clone https://github.com/savedra1/clipse.git
-    fi
-    cd clipse
-    git pull
-    go build -o clipse .
-    cp clipse "$HOME/.local/bin/"
-    echo "  ✓ clipse installed"
-fi
-
-# --- Grimblast (screenshot helper) ---
 if ! command -v grimblast &> /dev/null; then
-    echo "  → Installing grimblast..."
-    cd "$BUILD_DIR"
-    if [ ! -d "contrib" ]; then
-        git clone https://github.com/hyprwm/contrib.git
-    fi
-    cd contrib/grimblast
-    sudo make install
+    echo "  → Downloading grimblast..."
+    curl -fLo "$HOME/.local/bin/grimblast" \
+        "https://raw.githubusercontent.com/hyprwm/contrib/main/grimblast/grimblast"
+    chmod +x "$HOME/.local/bin/grimblast"
     echo "  ✓ grimblast installed"
-fi
-
-# --- EWW (widgets) ---
-if ! command -v eww &> /dev/null; then
-    echo "  → Building eww (this may take a while)..."
-    cd "$BUILD_DIR"
-    if [ ! -d "eww" ]; then
-        git clone https://github.com/elkowar/eww.git
-    fi
-    cd eww
-    git pull
-    cargo build --release --no-default-features --features wayland
-    cp target/release/eww "$HOME/.local/bin/"
-    echo "  ✓ eww installed"
-fi
-
-# --- SwayOSD (OSD for volume/brightness) ---
-if ! command -v swayosd-server &> /dev/null; then
-    echo "  → Building SwayOSD..."
-    cd "$BUILD_DIR"
-    if [ ! -d "SwayOSD" ]; then
-        git clone https://github.com/ErikReider/SwayOSD.git
-    fi
-    cd SwayOSD
-    git pull
-    # SwayOSD uses meson
-    meson setup build
-    ninja -C build
-    sudo ninja -C build install
-    echo "  ✓ SwayOSD installed"
-fi
-
-# --- SwayNotificationCenter (swaync) ---
-if ! command -v swaync &> /dev/null; then
-    echo "  → Building SwayNotificationCenter..."
-    cd "$BUILD_DIR"
-    if [ ! -d "SwayNotificationCenter" ]; then
-        git clone https://github.com/ErikReider/SwayNotificationCenter.git
-    fi
-    cd SwayNotificationCenter
-    git pull
-    meson setup build
-    ninja -C build
-    sudo ninja -C build install
-    echo "  ✓ SwayNotificationCenter installed"
+else
+    echo "  ✓ grimblast already installed"
 fi
 
 # ═══════════════════════════════════════════════════════════════
-# STEP 7: Enable required services
+# STEP 7: Set fish as default shell
 # ═══════════════════════════════════════════════════════════════
 echo ""
-echo "🔧 Enabling system services..."
-echo ""
-
-# Bluetooth
-sudo systemctl enable --now bluetooth || true
-
-# PipeWire (usually enabled by default on Fedora)
-systemctl --user enable --now pipewire pipewire-pulse wireplumber || true
-
-echo "✓ Services enabled"
-
-# ═══════════════════════════════════════════════════════════════
-# STEP 8: Set fish as default shell
-# ═══════════════════════════════════════════════════════════════
-echo ""
-echo "🐟 Setting fish as default shell..."
+echo "🐟 Configuring fish shell..."
 echo ""
 
 if command -v fish &> /dev/null; then
@@ -282,23 +178,49 @@ if command -v fish &> /dev/null; then
     fi
     
     if [ "$SHELL" != "$FISH_PATH" ]; then
-        chsh -s "$FISH_PATH"
-        echo "✓ Default shell changed to fish (will take effect on next login)"
+        echo "  → To set fish as default shell, run:"
+        echo "    chsh -s $FISH_PATH"
     else
-        echo "✓ Fish is already your default shell"
+        echo "  ✓ Fish is already your default shell"
     fi
 fi
 
+# ═══════════════════════════════════════════════════════════════
+# STEP 8: Ensure ~/.local/bin is in PATH
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "🔧 Checking PATH configuration..."
+echo ""
+
+if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+    echo "  ⚠️  ~/.local/bin is not in PATH"
+    echo "  → Add to fish config: fish_add_path ~/.local/bin"
+    echo "  → Or add to ~/.bashrc: export PATH=\"\$HOME/.local/bin:\$PATH\""
+else
+    echo "  ✓ ~/.local/bin is in PATH"
+fi
+
+# ═══════════════════════════════════════════════════════════════
+# SUMMARY
+# ═══════════════════════════════════════════════════════════════
 echo ""
 echo "╔════════════════════════════════════════════════════════╗"
-echo "║   ✓ Fedora setup complete!                             ║"
+echo "║   ✓ Setup complete!                                    ║"
 echo "╚════════════════════════════════════════════════════════╝"
+echo ""
+echo "Installed via COPR/DNF:"
+echo "  • eww, matugen, starship, swaync, swayosd"
+echo "  • alacritty, kitty, fish, cava, ranger, etc."
+echo ""
+echo "Installed via pip:"
+echo "  • pywal"
+echo ""
+echo "Installed via go:"
+echo "  • clipse"
 echo ""
 echo "Next steps:"
 echo "  1. Run ./install.sh to copy dotfiles"
-echo "  2. Log out and select Hyprland from display manager"
-echo "  3. Or start with: Hyprland"
-echo ""
-echo "Note: $HOME/.local/bin should be in your PATH"
-echo "      Add to fish config: fish_add_path ~/.local/bin"
+echo "  2. Set fish as shell: chsh -s $(which fish)"
+echo "  3. Log out and log back in"
+echo "  4. Set GTK theme with: nwg-look"
 echo ""
