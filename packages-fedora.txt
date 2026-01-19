@@ -79,6 +79,50 @@ playerctl
 easyeffects
 
 # ═══════════════════════════════════════════════════════════════
+# BROWSERS (firefox-nightly from COPR: nickvth/firefox-nightly)
+# ═══════════════════════════════════════════════════════════════
+chromium
+# firefox-nightly - COPR: nickvth/firefox-nightly
+
+# ═══════════════════════════════════════════════════════════════
+# DEVELOPMENT (VSCode from Microsoft repo)
+# ═══════════════════════════════════════════════════════════════
+# code - Microsoft repo (added by setup-fedora.sh)
+android-tools
+java-17-openjdk-devel
+gh
+# google-cloud-cli - manual install from cloud.google.com/sdk
+
+# ═══════════════════════════════════════════════════════════════
+# COMMUNICATION
+# ═══════════════════════════════════════════════════════════════
+telegram-desktop
+
+# ═══════════════════════════════════════════════════════════════
+# MEDIA
+# ═══════════════════════════════════════════════════════════════
+mpv
+
+# ═══════════════════════════════════════════════════════════════
+# OFFICE & PRODUCTIVITY
+# ═══════════════════════════════════════════════════════════════
+libreoffice
+
+# ═══════════════════════════════════════════════════════════════
+# SYSTEM UTILITIES
+# ═══════════════════════════════════════════════════════════════
+# auto-cpufreq - COPR: abn/auto-cpufreq
+cronie
+viewnior
+pavucontrol
+flameshot
+copyq
+feh
+progress
+swappy
+
+
+# ═══════════════════════════════════════════════════════════════
 # THEMING & APPEARANCE
 # ═══════════════════════════════════════════════════════════════
 # matugen - build from source (Rust) or check COPR
@@ -101,8 +145,19 @@ swww
 grim
 slurp
 hyprpicker
+swappy
 # grimblast - install manually from https://github.com/hyprwm/contrib
-# swappy - check COPR or build from source
+# hyprshot - install manually from https://github.com/Gustash/Hyprshot
+
+# ═══════════════════════════════════════════════════════════════
+# KEYBOARD & INPUT
+# ═══════════════════════════════════════════════════════════════
+# kmonad - COPR: ioriveur/kmonad
+
+# ═══════════════════════════════════════════════════════════════
+# ADDITIONAL WALLPAPER
+# ═══════════════════════════════════════════════════════════════
+hyprpaper
 
 # ═══════════════════════════════════════════════════════════════
 # OSD & SYSTEM CONTROLS

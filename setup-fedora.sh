@@ -49,7 +49,30 @@ sudo dnf copr enable -y erikreider/SwayOSD 2>/dev/null || echo "ℹ️  SwayOSD 
 # Clipse clipboard manager
 sudo dnf copr enable -y azandure/clipse || echo "⚠️  azandure/clipse COPR failed"
 
+# Firefox Nightly
+sudo dnf copr enable -y nickvth/firefox-nightly || echo "⚠️  nickvth/firefox-nightly COPR failed"
+
+# Kmonad (keyboard remapping)
+sudo dnf copr enable -y ioriveur/kmonad || echo "⚠️  ioriveur/kmonad COPR failed"
+
+# Auto-cpufreq
+sudo dnf copr enable -y abn/auto-cpufreq || echo "⚠️  abn/auto-cpufreq COPR failed"
+
 echo "✓ COPR repositories enabled"
+
+# ═══════════════════════════════════════════════════════════════
+# STEP 1.5: Add third-party repos (VSCode)
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "📦 Adding third-party repositories..."
+echo ""
+
+# Microsoft VSCode repo
+if [ ! -f /etc/yum.repos.d/vscode.repo ]; then
+    sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+    echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
+    echo "  ✓ VSCode repo added"
+fi
 
 # ═══════════════════════════════════════════════════════════════
 # STEP 2: Install config-specific packages from dnf
@@ -94,7 +117,27 @@ sudo dnf install -y --skip-unavailable \
     adw-gtk3-theme \
     papirus-icon-theme \
     nemo \
-    loupe
+    loupe \
+    chromium \
+    firefox-nightly \
+    code \
+    android-tools \
+    java-17-openjdk-devel \
+    gh \
+    telegram-desktop \
+    mpv \
+    libreoffice \
+    auto-cpufreq \
+    cronie \
+    viewnior \
+    pavucontrol \
+    flameshot \
+    copyq \
+    feh \
+    progress \
+    swappy \
+    kmonad \
+    hyprpaper
 
 echo "✓ DNF packages installed"
 
@@ -165,6 +208,53 @@ else
 fi
 
 # ═══════════════════════════════════════════════════════════════
+# STEP 6.5: Install hyprshot (screenshot tool)
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "📸 Installing hyprshot..."
+echo ""
+
+if ! command -v hyprshot &> /dev/null; then
+    echo "  → Downloading hyprshot..."
+    curl -fLo "$HOME/.local/bin/hyprshot" \
+        "https://raw.githubusercontent.com/Gustash/Hyprshot/main/hyprshot"
+    chmod +x "$HOME/.local/bin/hyprshot"
+    echo "  ✓ hyprshot installed"
+else
+    echo "  ✓ hyprshot already installed"
+fi
+
+# ═══════════════════════════════════════════════════════════════
+# STEP 6.6: Install spicetify-cli (Spotify theming)
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "🎵 Installing spicetify-cli..."
+echo ""
+
+if ! command -v spicetify &> /dev/null; then
+    echo "  → Installing spicetify-cli..."
+    curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh
+    echo "  ✓ spicetify installed"
+else
+    echo "  ✓ spicetify already installed"
+fi
+
+# ═══════════════════════════════════════════════════════════════
+# STEP 6.7: Install Antigravity (Google agentic dev platform)
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "🚀 Installing Antigravity..."
+echo ""
+
+if ! command -v antigravity &> /dev/null; then
+    echo "  → Installing Antigravity..."
+    curl -fsSL https://antigravity.dev/install.sh | sh
+    echo "  ✓ Antigravity installed"
+else
+    echo "  ✓ Antigravity already installed"
+fi
+
+# ═══════════════════════════════════════════════════════════════
 # STEP 7: Set fish as default shell
 # ═══════════════════════════════════════════════════════════════
 echo ""
@@ -210,17 +300,26 @@ echo "╚═══════════════════════�
 echo ""
 echo "Installed via COPR/DNF:"
 echo "  • eww, matugen, starship, swaync, swayosd"
-echo "  • alacritty, kitty, fish, cava, ranger, etc."
+echo "  • alacritty, kitty, fish, cava, ranger, neovim"
+echo "  • firefox-nightly, chromium, code (VSCode)"
+echo "  • telegram-desktop, mpv, libreoffice"
+echo "  • auto-cpufreq, kmonad, hyprpaper"
+echo "  • dev tools: android-tools, gh, java-17-openjdk"
 echo ""
 echo "Installed via pip:"
 echo "  • pywal"
 echo ""
-echo "Installed via go:"
-echo "  • clipse"
+echo "Installed manually:"
+echo "  • grimblast, hyprshot, spicetify-cli, antigravity"
+echo ""
+echo "Manual installation required:"
+echo "  • Cisco Packet Tracer (download from netacad.com)"
+echo "  • Google Cloud CLI (see cloud.google.com/sdk/docs/install)"
 echo ""
 echo "Next steps:"
 echo "  1. Run ./install.sh to copy dotfiles"
 echo "  2. Set fish as shell: chsh -s $(which fish)"
 echo "  3. Log out and log back in"
 echo "  4. Set GTK theme with: nwg-look"
+echo "  5. Configure spicetify: spicetify backup apply"
 echo ""
