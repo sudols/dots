@@ -177,70 +177,6 @@ fi
 
 mkdir -p "$HOME/.local/bin"
 
-# ═══════════════════════════════════════════════════════════════
-# STEP 6: Install grimblast (screenshot helper, simple copy)
-# ═══════════════════════════════════════════════════════════════
-echo ""
-echo "📸 Installing grimblast..."
-echo ""
-
-if ! command -v grimblast &> /dev/null; then
-    echo "  → Downloading grimblast..."
-    curl -fLo "$HOME/.local/bin/grimblast" \
-        "https://raw.githubusercontent.com/hyprwm/contrib/main/grimblast/grimblast"
-    chmod +x "$HOME/.local/bin/grimblast"
-    echo "  ✓ grimblast installed"
-else
-    echo "  ✓ grimblast already installed"
-fi
-
-# ═══════════════════════════════════════════════════════════════
-# STEP 6.5: Install hyprshot (screenshot tool)
-# ═══════════════════════════════════════════════════════════════
-echo ""
-echo "📸 Installing hyprshot..."
-echo ""
-
-if ! command -v hyprshot &> /dev/null; then
-    echo "  → Downloading hyprshot..."
-    curl -fLo "$HOME/.local/bin/hyprshot" \
-        "https://raw.githubusercontent.com/Gustash/Hyprshot/main/hyprshot"
-    chmod +x "$HOME/.local/bin/hyprshot"
-    echo "  ✓ hyprshot installed"
-else
-    echo "  ✓ hyprshot already installed"
-fi
-
-# ═══════════════════════════════════════════════════════════════
-# STEP 6.6: Install spicetify-cli (Spotify theming)
-# ═══════════════════════════════════════════════════════════════
-echo ""
-echo "🎵 Installing spicetify-cli..."
-echo ""
-
-if ! command -v spicetify &> /dev/null; then
-    echo "  → Installing spicetify-cli..."
-    curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh
-    echo "  ✓ spicetify installed"
-else
-    echo "  ✓ spicetify already installed"
-fi
-
-# ═══════════════════════════════════════════════════════════════
-# STEP 6.7: Install Antigravity (Google agentic dev platform)
-# ═══════════════════════════════════════════════════════════════
-echo ""
-echo "🚀 Installing Antigravity..."
-echo ""
-
-if ! command -v antigravity &> /dev/null; then
-    echo "  → Installing Antigravity..."
-    curl -fsSL https://antigravity.dev/install.sh | sh
-    echo "  ✓ Antigravity installed"
-else
-    echo "  ✓ Antigravity already installed"
-fi
-
 
 # ═══════════════════════════════════════════════════════════════
 # STEP 7: Set fish as default shell
@@ -296,10 +232,11 @@ echo ""
 echo "Installed via pip:"
 echo "  • pywal"
 echo ""
-echo "Installed manually:"
-echo "  • grimblast, hyprshot, spicetify-cli, antigravity"
-echo ""
 echo "Manual installation required:"
+echo "  • grimblast: curl from github.com/hyprwm/contrib"
+echo "  • hyprshot: curl from github.com/Gustash/Hyprshot"
+echo "  • spicetify-cli: curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh"
+echo "  • antigravity: curl -fsSL https://antigravity.dev/install.sh | sh"
 echo "  • Cisco Packet Tracer (download from netacad.com)"
 echo "  • Google Cloud CLI (see cloud.google.com/sdk/docs/install)"
 echo ""
@@ -308,5 +245,4 @@ echo "  1. Run ./install.sh to copy dotfiles"
 echo "  2. Set fish as shell: chsh -s $(which fish)"
 echo "  3. Log out and log back in"
 echo "  4. Set GTK theme with: nwg-look"
-echo "  5. Configure spicetify: spicetify backup apply"
 echo ""
