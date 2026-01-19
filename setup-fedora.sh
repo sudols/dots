@@ -49,14 +49,8 @@ sudo dnf copr enable -y erikreider/SwayOSD 2>/dev/null || echo "ℹ️  SwayOSD 
 # Clipse clipboard manager
 sudo dnf copr enable -y azandure/clipse || echo "⚠️  azandure/clipse COPR failed"
 
-# Firefox Nightly
-sudo dnf copr enable -y nickvth/firefox-nightly || echo "⚠️  nickvth/firefox-nightly COPR failed"
-
-# Kmonad (keyboard remapping)
-sudo dnf copr enable -y ioriveur/kmonad || echo "⚠️  ioriveur/kmonad COPR failed"
-
-# Auto-cpufreq
-sudo dnf copr enable -y abn/auto-cpufreq || echo "⚠️  abn/auto-cpufreq COPR failed"
+# Firefox Nightly (standalone, doesn't conflict with stable Firefox)
+sudo dnf copr enable -y sikevux/firefox-nightly || echo "⚠️  sikevux/firefox-nightly COPR failed - will install from tarball later"
 
 echo "✓ COPR repositories enabled"
 
@@ -127,7 +121,6 @@ sudo dnf install -y --skip-unavailable \
     telegram-desktop \
     mpv \
     libreoffice \
-    auto-cpufreq \
     cronie \
     viewnior \
     pavucontrol \
@@ -136,7 +129,6 @@ sudo dnf install -y --skip-unavailable \
     feh \
     progress \
     swappy \
-    kmonad \
     hyprpaper
 
 echo "✓ DNF packages installed"
@@ -252,6 +244,43 @@ if ! command -v antigravity &> /dev/null; then
     echo "  ✓ Antigravity installed"
 else
     echo "  ✓ Antigravity already installed"
+fi
+
+# ═══════════════════════════════════════════════════════════════
+# STEP 6.8: Install kmonad (keyboard remapping - binary download)
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "⌨️  Installing kmonad..."
+echo ""
+
+if ! command -v kmonad &> /dev/null; then
+    echo "  → Downloading kmonad binary..."
+    KMONAD_VERSION=$(curl -s https://api.github.com/repos/kmonad/kmonad/releases/latest | grep tag_name | cut -d '"' -f 4)
+    curl -fLo "$HOME/.local/bin/kmonad" \
+        "https://github.com/kmonad/kmonad/releases/download/${KMONAD_VERSION}/kmonad-${KMONAD_VERSION}-linux"
+    chmod +x "$HOME/.local/bin/kmonad"
+    echo "  ✓ kmonad installed"
+    echo "  ⚠️  Note: You may need to configure udev rules for kmonad"
+else
+    echo "  ✓ kmonad already installed"
+fi
+
+# ═══════════════════════════════════════════════════════════════
+# STEP 6.9: Install auto-cpufreq (via pip)
+# ═══════════════════════════════════════════════════════════════
+echo ""
+echo "🔋 Installing auto-cpufreq..."
+echo ""
+
+if ! command -v auto-cpufreq &> /dev/null; then
+    echo "  → Installing auto-cpufreq via git installer..."
+    git clone https://github.com/AdnanHodzic/auto-cpufreq.git /tmp/auto-cpufreq
+    cd /tmp/auto-cpufreq && sudo ./auto-cpufreq-installer --install
+    cd - > /dev/null
+    rm -rf /tmp/auto-cpufreq
+    echo "  ✓ auto-cpufreq installed"
+else
+    echo "  ✓ auto-cpufreq already installed"
 fi
 
 # ═══════════════════════════════════════════════════════════════
